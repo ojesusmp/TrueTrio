@@ -4,6 +4,29 @@ All notable changes to `TrueTrio` are documented in this file.
 
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.3.0] - 2026-05-12
+
+### Added
+
+- `.claude-plugin/marketplace.json` registers Trio as a Claude Code plugin. Users can install via `/plugin marketplace add ojesusmp/TrueTrio` followed by `/plugin install trio@truetrio`.
+- README documents all three install paths (Claude Code marketplace, git clone, npm) with a per-path `Verify` step.
+
+### Changed
+
+- Moved the cross-platform installer from `bin/install.mjs` to `install.mjs` at the repo root. The previous location caused the postinstall script to fail with `MODULE_NOT_FOUND` when installing globally from GitHub on Windows, because the npm install pipeline did not resolve the nested-directory path consistently across the extract / link / postinstall phases. Moving the file to the root eliminates the subdirectory interaction.
+- Dropped the `truetrio` bin command from `package.json` (was unused; removing it also removes the bin-wrapper code path that contributed to the install failure on Windows).
+- Updated `package.json` `files` array, `main`, `postinstall`, and `test` script to reference `install.mjs` at the root.
+
+### Fixed
+
+- `npm install -g github:ojesusmp/TrueTrio` now exits 0 on Windows with the SKILL.md correctly deployed and SHA-verified.
+
+### Notes
+
+- No skill behavior change. `SKILL.md` content is byte-identical. All 14 acceptance criteria still hold.
+
+[1.3.0]: https://github.com/ojesusmp/TrueTrio/releases/tag/v1.3.0
+
 ## [1.2.0] - 2026-05-12
 
 ### Changed

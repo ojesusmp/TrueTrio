@@ -19,38 +19,80 @@ Default `/trio <thing>` runs Scout + 1-pass (under 1,000 words output). The `--d
 
 ## Install
 
-One command. Works on Linux, macOS, and Windows. No manual file copying.
+Three independent install paths. Pick the one that fits your workflow.
+
+### 1. Claude Code plugin marketplace
+
+In a Claude Code conversation, run:
+
+```
+/plugin marketplace add ojesusmp/TrueTrio
+/plugin install trio@truetrio
+```
+
+The marketplace metadata at `.claude-plugin/marketplace.json` registers the skill with Claude Code automatically. No file copying required.
+
+**Verify:** open a fresh Claude Code conversation and run `/trio "make app better"`. The output should begin with `Round 0 — Scout pre-flight`.
+
+### 2. Git clone
+
+Use when you want the full repo on disk (for version control, contributing, or pinning to a specific tag).
+
+```bash
+git clone https://github.com/ojesusmp/TrueTrio.git
+cd TrueTrio
+```
+
+Then copy `SKILL.md` into your Claude Code skills directory. Git does not run install scripts — this step is manual.
+
+```bash
+# Linux / macOS
+mkdir -p ~/.claude/skills/trio
+cp SKILL.md ~/.claude/skills/trio/SKILL.md
+```
+
+```powershell
+# Windows PowerShell
+New-Item -ItemType Directory -Force -Path "$env:USERPROFILE\.claude\skills\trio" | Out-Null
+Copy-Item .\SKILL.md "$env:USERPROFILE\.claude\skills\trio\SKILL.md"
+```
+
+**Update later:** `git pull` then re-run the copy command above.
+
+**Verify:** the deployed `SKILL.md` should be byte-identical to the repo's `SKILL.md`. On Linux/macOS: `sha256sum SKILL.md ~/.claude/skills/trio/SKILL.md` should print matching hashes. On Windows: `(Get-FileHash .\SKILL.md).Hash -eq (Get-FileHash "$env:USERPROFILE\.claude\skills\trio\SKILL.md").Hash` should print `True`.
+
+### 3. npm
+
+Cross-platform, automatic copy via postinstall script.
 
 ```bash
 npm install -g github:ojesusmp/TrueTrio
 ```
 
-The package's postinstall step copies `SKILL.md` into your Claude Code skills directory automatically (`~/.claude/skills/trio/SKILL.md` on every platform — Node's `os.homedir()` resolves to the correct path).
+The postinstall step copies `SKILL.md` into your Claude Code skills directory automatically (`~/.claude/skills/trio/SKILL.md` on every platform — Node's `os.homedir()` resolves the path).
 
 Requires Node.js 18+.
 
-### Update
+**Update later:** re-run the same command. It fetches the latest `main`, re-runs postinstall, and overwrites the deployed `SKILL.md`.
 
-Re-run the same command. It pulls the latest `main`, re-runs postinstall, and overwrites the deployed `SKILL.md`.
-
-```bash
-npm install -g github:ojesusmp/TrueTrio
-```
-
-### Manual re-install / repair
-
-After installation, the package exposes a `truetrio` command. Run it any time to re-copy `SKILL.md` from the installed package back into your skills directory (useful if the skills file was deleted, edited, or corrupted):
+**Verify:** the install command prints `[trio install] SHA256: <hash>`. The deployed file should hash to the same value:
 
 ```bash
-truetrio
+# Linux / macOS
+sha256sum ~/.claude/skills/trio/SKILL.md
 ```
 
-### Verify
+```powershell
+# Windows PowerShell
+(Get-FileHash "$env:USERPROFILE\.claude\skills\trio\SKILL.md" -Algorithm SHA256).Hash
+```
+
+### Final verification (all install paths)
 
 Open a fresh Claude Code conversation. Type:
 
 ```
-/trio "make my app better"
+/trio "make app better"
 ```
 
 The output should begin with `Round 0 — Scout pre-flight` and end with a Solomon verdict of `STOP-AND-RECLARIFY` (because the prompt itself is Cynefin-confused — that is the skill's first acceptance test).

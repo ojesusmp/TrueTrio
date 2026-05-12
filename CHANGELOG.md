@@ -23,12 +23,9 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 
 ## [1.3.1] - 2026-05-12
 
-### Fixed
-
-- Converted the cross-platform installer from ESM (`install.mjs`) to CommonJS (`install.cjs`). On Windows + Node 24 + npm 11, the global install pipeline misreports the postinstall script path for `.mjs` files, surfacing a phantom `MODULE_NOT_FOUND` exit-1 even when the script ran successfully. CommonJS is the lifecycle convention used by mature packages (for example `@anthropic-ai/claude-code`'s `install.cjs`) and avoids the issue.
-
 ### Changed
 
+- Converted the cross-platform installer from ESM (`install.mjs`) to CommonJS (`install.cjs`) to align with the lifecycle convention used by mature packages with postinstall scripts. This did not eliminate the Windows + Node 24 + npm 11 phantom `MODULE_NOT_FOUND` exit-1 on the `github:` install path; v1.3.2 documents that quirk as a known cosmetic issue.
 - `package.json` no longer declares `"type": "module"` since the installer is CommonJS.
 - `main`, `postinstall`, `test`, and `files` array all reference `install.cjs`.
 
@@ -47,13 +44,8 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 
 ### Changed
 
-- Moved the cross-platform installer from `bin/install.mjs` to `install.mjs` at the repo root. The previous location caused the postinstall script to fail with `MODULE_NOT_FOUND` when installing globally from GitHub on Windows, because the npm install pipeline did not resolve the nested-directory path consistently across the extract / link / postinstall phases. Moving the file to the root eliminates the subdirectory interaction.
-- Dropped the `truetrio` bin command from `package.json` (was unused; removing it also removes the bin-wrapper code path that contributed to the install failure on Windows).
+- Moved the cross-platform installer from `bin/install.mjs` to `install.mjs` at the repo root and dropped the unused `truetrio` bin command, simplifying the package shape. This attempted to address the Windows + Node 24 + npm 11 postinstall `MODULE_NOT_FOUND` exit-1 on the `github:` install path; the cosmetic exit-1 persisted and is documented in v1.3.2.
 - Updated `package.json` `files` array, `main`, `postinstall`, and `test` script to reference `install.mjs` at the root.
-
-### Fixed
-
-- `npm install -g github:ojesusmp/TrueTrio` now exits 0 on Windows with the SKILL.md correctly deployed and SHA-verified.
 
 ### Notes
 

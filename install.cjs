@@ -23,13 +23,8 @@ const dryRun = argSet.has("--dry-run");
 const quiet = argSet.has("--quiet");
 const force = argSet.has("--force");
 
-const log = function () {
-  if (!quiet) console.log.apply(console, ["[trio install]"].concat(Array.from(arguments)));
-};
-const die = function () {
-  console.error.apply(console, ["[trio install]"].concat(Array.from(arguments)));
-  process.exit(1);
-};
+const log = (...args) => { if (!quiet) console.log("[trio install]", ...args); };
+const die = (...args) => { console.error("[trio install]", ...args); process.exit(1); };
 
 // Guard: skip postinstall when running from inside the source checkout
 // (npm runs postinstall in development too; only copy when installed as a

@@ -4,6 +4,26 @@ All notable changes to `TrueTrio` are documented in this file.
 
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.2.0] - 2026-05-12
+
+### Changed
+
+- Removed personal-name attributions from all user-facing documentation (README, SKILL.md, CONTRIBUTING, CHANGELOG, EXAMPLES, PR/issue templates, package.json). Replaced with generic descriptors of the underlying frameworks (e.g. "the 4 LLM coding Methods" instead of an individual's name; "outside-view discipline" instead of an individual's name; "differential model" instead of a fictional-character reference). This eliminates endorsement-implication and trademark-association risk.
+- `--deliberate` mode now referred to as the "3-round differential model" rather than any named individual's method.
+- Scout's role description no longer attributes the four pre-flight questions to specific individuals.
+- README "Credits" section now lists the frameworks used (Theory of Constraints, Cynefin, OODA, outside-view, reversibility, premortem, interest-vs-position) without naming originators.
+
+### Added
+
+- Pre-release name-audit checklist item in `CONTRIBUTING.md` to prevent future reintroduction of personal-name attributions.
+
+### Notes
+
+- No skill behavior change. `SKILL.md` acceptance criteria (AC1–AC14) still hold.
+- Frameworks themselves (Cynefin, OODA loop, Theory of Constraints, MIT License) remain referenced by their public concept names.
+
+[1.2.0]: https://github.com/ojesusmp/TrueTrio/releases/tag/v1.2.0
+
 ## [1.1.0] - 2026-05-12
 
 ### Added
@@ -20,7 +40,7 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 
 ### Notes
 
-- Marketplace install (`/plugin marketplace add`) is not yet supported. `.claude-plugin/marketplace.json` is intentionally not shipped (Karpathy R2 — not requested). Use the npm install path.
+- Marketplace install (`/plugin marketplace add`) is not yet supported. `.claude-plugin/marketplace.json` is intentionally not shipped (Method R2 — not requested). Use the npm install path.
 
 [1.1.0]: https://github.com/ojesusmp/TrueTrio/releases/tag/v1.1.0
 
@@ -31,7 +51,7 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 - Initial release of the Trio skill (`SKILL.md`).
 - Round 0 Scout pre-flight (4 anchor-breaking questions: hidden cost, outside view, reversibility, premortem).
 - Three sequential non-overlapping lenses (Observer / Constraint-Finder / Solomon) keyed to 3 Core Questions.
-- Default 1-pass mode (≤ 1,000 words output) and `--deliberate` 3-round House-model differential (≤ 1,700 words).
+- Default 1-pass mode (≤ 1,000 words output) and `--deliberate` 3-round differential model (≤ 1,700 words).
 - `--pass=prompt` / `--pass=solution` modes with auto-detect at 200 characters.
 - `--paid` flag for tier-cap violation detection.
 - Solomon verdict block with PROCEED / SIMPLIFY / STOP-AND-RECLARIFY verdicts and emit-only `Log entry:` line for optional `.usage.log` tracking.

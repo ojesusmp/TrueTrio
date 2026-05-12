@@ -11,9 +11,9 @@ A Claude Code skill that runs a 4-actor analytical pipeline on any input — a t
 - **Constraint-Finder (Q2)** — names the one bottleneck and flags tier-cap violations.
 - **Solomon (Q3)** — synthesizes a verdict: PROCEED / SIMPLIFY / STOP-AND-RECLARIFY, with a smallest testable action and verifiable success criterion.
 
-Backed by Karpathy's 4 LLM rules, the Line Method 10 steps, and Kahneman / Bezos / Klein pre-flight discipline.
+Backed by the 4 LLM coding Methods, the Line Method 10 steps, and outside-view / reversibility / premortem pre-flight discipline.
 
-Default `/trio <thing>` runs Scout + 1-pass (under 1,000 words output). The `--deliberate` flag runs Scout + 3-round House-model differential where lenses cross-attack each other's weakest claims with killing tests before Solomon judges (under 1,700 words).
+Default `/trio <thing>` runs Scout + 1-pass (under 1,000 words output). The `--deliberate` flag runs Scout + 3-round differential model where lenses cross-attack each other's weakest claims with killing tests before Solomon judges (under 1,700 words).
 
 ---
 
@@ -69,7 +69,7 @@ The output should begin with `Round 0 — Scout pre-flight` and end with a Solom
 
 - **Pass auto-detect** — input under 200 chars defaults to `--pass=prompt`; longer input defaults to `--pass=solution`.
 - **`--paid`** — signals paid-tier business context. Constraint-Finder will emit `CONSTRAINT VIOLATION: tier-cap` if your proposed solution depends on a capped or free-tier tool.
-- **`--deliberate`** — runs 3 rounds of cross-examination (Dr. House differential model) before Solomon judges. Use on high-stakes decisions (firing, lawsuit, irreversible architecture, big purchase). Costs ~1.6x tokens and ~3x latency vs default 1-pass.
+- **`--deliberate`** — runs 3 rounds of cross-examination (differential model: hypotheses killed by tests, not negotiated) before Solomon judges. Use on high-stakes decisions (firing, lawsuit, irreversible architecture, big purchase). Costs ~1.6x tokens and ~3x latency vs default 1-pass.
 
 Solomon emits a final `Log entry:` line in the format `<YYYY-MM-DD> | <mode> | <verdict> | followed=?` that you can paste into a `.usage.log` to track whether you actually followed Trio's verdicts over time. The skill itself writes no files.
 
@@ -103,16 +103,16 @@ See [SECURITY.md](./SECURITY.md).
 
 Built and maintained by **Orlando Molina — TruePointAgents**.
 
-Design draws on:
+Design draws on a set of established decision-making and problem-reduction frameworks:
 
-- Andrej Karpathy — 4 LLM coding guidelines
-- Donella Meadows / Eli Goldratt — Theory of Constraints
-- David Snowden — Cynefin framework
-- John Boyd — OODA loop
-- Daniel Kahneman — outside view / base rates
-- Jeff Bezos — one-way / two-way door reversibility test
-- Gary Klein — premortem
-- Roger Fisher / William Ury — interest vs position separation
+- A 4-rule discipline for LLM-assisted coding (think before coding, simplicity first, surgical changes, goal-driven execution).
+- Theory of Constraints (find the one bottleneck).
+- Cynefin framework (classify the problem type before choosing an approach).
+- The OODA loop (observe, orient, decide, act).
+- Outside-view discipline (compare against base rates from similar past cases).
+- One-way / two-way door reversibility tests.
+- Premortem (imagined-failure exercise).
+- Interest-vs-position separation in negotiation.
 
 ## License
 

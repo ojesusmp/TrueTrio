@@ -14,12 +14,12 @@ Closes #
 - [ ] Documentation only
 - [ ] Refactor (no behavior change)
 
-## Karpathy discipline checklist
+## Method discipline checklist
 
-- [ ] **R1 — Think Before Coding.** Assumptions surfaced in the PR description. If interpretations were ambiguous, both were named.
-- [ ] **R2 — Simplicity First.** Diff is the minimum that solves the user problem. No speculative flexibility added.
-- [ ] **R3 — Surgical Changes.** Every changed line traces directly to the linked issue. Adjacent style / comments / formatting were not modified.
-- [ ] **R4 — Goal-Driven Execution.** Acceptance criterion stated below and verified before submitting.
+- [ ] **Method R1 — Think Before Coding.** Assumptions surfaced in the PR description. If interpretations were ambiguous, both were named.
+- [ ] **Method R2 — Simplicity First.** Diff is the minimum that solves the user problem. No speculative flexibility added.
+- [ ] **Method R3 — Surgical Changes.** Every changed line traces directly to the linked issue. Adjacent style / comments / formatting were not modified.
+- [ ] **Method R4 — Goal-Driven Execution.** Acceptance criterion stated below and verified before submitting.
 
 ## Non-overlap verification
 

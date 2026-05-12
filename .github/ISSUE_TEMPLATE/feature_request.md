@@ -23,7 +23,7 @@ What should Trio do instead? Which actor would this change touch?
 - [ ] Token cap
 - [ ] Acceptance criteria
 
-## Karpathy R2 justification
+## Method R2 (Simplicity First) justification
 
 The project's primary discipline is "no flexibility or configurability that was not requested." Briefly justify why this change is load-bearing rather than speculative:
 
@@ -33,7 +33,7 @@ The project's primary discipline is "no flexibility or configurability that was 
 
 ## Non-overlap check
 
-Trio's actors own non-overlapping slices of Karpathy + Line Method. Does this change preserve that?
+Trio's actors own non-overlapping slices of the Methods + Line Method. Does this change preserve that?
 
 - Will it cause Scout, Observer, Constraint-Finder, or Solomon to duplicate another actor's output?
 - Will it require an actor to produce something currently outside its job?

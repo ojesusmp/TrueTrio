@@ -1,7 +1,7 @@
 ---
 name: trio
-description: "Three-lens simplicity check with pre-flight Scout for any prompt or proposed solution. Scout opens with 4 anchor-breaking questions (hidden cost, outside view, reversibility, premortem). Then each lens answers one of the 3 Core Questions — Observer: 'what are we changing?' (Q1) — Constraint-Finder: 'what is really blocking it?' (Q2) — Solomon: 'what is the smallest smart move now, and how will we know it worked?' (Q3). Backed by Karpathy's 4 LLM rules + Line Method 10 steps + Kahneman/Bezos/Klein pre-flight discipline. Default = Scout + 1-pass forward sweep. `--deliberate` flag runs Scout + 3-round House-model differential: lenses cross-attack weakest claims and propose killing tests before Solomon judges. Constraint-Finder flags tier-cap violations for paid-context users. Solomon emits PROCEED / SIMPLIFY / STOP-AND-RECLARIFY verdict. Output capped at 1,000 words (1-pass) or 1,700 words (--deliberate). Use when a request looks vague, when a Claude-proposed solution offers many options, when you suspect overengineering, or when paid-tier business context must reject free-tier capped tools."
-aliases: [trio, simplicity-trio, line-method, karpathy-check]
+description: "Three-lens simplicity check with pre-flight Scout for any prompt or proposed solution. Scout opens with 4 anchor-breaking questions (hidden cost, outside view, reversibility, premortem). Then each lens answers one of the 3 Core Questions — Observer: 'what are we changing?' (Q1) — Constraint-Finder: 'what is really blocking it?' (Q2) — Solomon: 'what is the smallest smart move now, and how will we know it worked?' (Q3). Backed by the 4 LLM coding Methods + Line Method 10 steps + outside-view / reversibility / premortem pre-flight discipline. Default = Scout + 1-pass forward sweep. `--deliberate` flag runs Scout + 3-round differential model: lenses cross-attack weakest claims and propose killing tests before Solomon judges. Constraint-Finder flags tier-cap violations for paid-context users. Solomon emits PROCEED / SIMPLIFY / STOP-AND-RECLARIFY verdict. Output capped at 1,000 words (1-pass) or 1,700 words (--deliberate). Use when a request looks vague, when a Claude-proposed solution offers many options, when you suspect overengineering, or when paid-tier business context must reject free-tier capped tools."
+aliases: [trio, simplicity-trio, line-method, method-check]
 argument-hint: "<prompt or proposed solution to review> [--pass=prompt|solution] [--paid] [--deliberate]"
 level: 2
 ---
@@ -10,7 +10,7 @@ level: 2
 
 ## Why this exists
 
-LLMs silently pick interpretations, overengineer, and offer 15 options when 1 will do. Marketing Council's adversarial loop works for marketing assets but manufactures friction unnecessary for general decisions. Trio replaces adversaries with three sequential lenses that share one goal: factual simplicity. Each lens owns a non-overlapping slice of Karpathy's 4 LLM coding guidelines and the Line Method's 10 simplification steps. Solomon synthesizes — no rubber-stamp, no theater.
+LLMs silently pick interpretations, overengineer, and offer 15 options when 1 will do. Adversarial pitcher-vs-skeptic loops work for marketing assets but manufacture friction unnecessary for general decisions. Trio replaces always-on adversaries with three sequential lenses that share one goal: factual simplicity. Each lens owns a non-overlapping slice of the 4 LLM coding Methods and the Line Method's 10 simplification steps. Solomon synthesizes — no rubber-stamp, no theater.
 
 ## Prime Directive
 
@@ -70,7 +70,7 @@ Trio flags tier-cap violations when input contains any of: `paid`, `budget $`, `
 
 ## Round 0 — Scout (pre-flight, always-on)
 
-Scout fires before any of the 3 lenses. Its job: break the obvious frame before Observer and Constraint-Finder anchor on it. Composite role drawing from Kahneman (outside view), Bezos (reversibility), Klein (premortem), and the universal "what's not counted" check.
+Scout fires before any of the 3 lenses. Its job: break the obvious frame before Observer and Constraint-Finder anchor on it. Composite role drawing from outside-view discipline, reversibility classification, premortem (imagined-failure), and the universal "what's not counted" check.
 
 Scout does NOT propose solutions, name constraints, or render verdicts. Scout names the *missing variables* before the rest of Trio starts.
 
@@ -78,7 +78,7 @@ Scout does NOT propose solutions, name constraints, or render verdicts. Scout na
 
 1. **What am I not counting?** (hidden cost / labor / time / dependency that the framing pretends is free)
 2. **Outside view: what is the base rate?** (what happens when others try this — known cases, typical outcomes, "none known" if genuinely novel)
-3. **One-way door or two-way door?** (Bezos: reversibility class — `one-way` if hard to undo, `two-way` if cheap to undo, `mixed` if some sub-decisions are each)
+3. **One-way door or two-way door?** (reversibility class — `one-way` if hard to undo, `two-way` if cheap to undo, `mixed` if some sub-decisions are each)
 4. **Smart now, foolish in 30 days?** (pre-anchor premortem: imagine the action shipped, 30 days later it failed — name the most likely killer)
 
 **Output shape (default, 1-pass mode):**
@@ -112,7 +112,7 @@ Round 0 — Scout pre-flight
 
 **Answers Q1 (what):** "What exactly are we trying to change?"
 
-**Owns:** Karpathy R1 (Think Before Coding) + R3 (Surgical Changes). Line Method steps 1 (name real problem), 2 (Cynefin classification), 4 (position vs interest), 6 (detect false binary).
+**Owns:** Method R1 (Think Before Coding) + R3 (Surgical Changes). Line Method steps 1 (name real problem), 2 (Cynefin classification), 4 (position vs interest), 6 (detect false binary).
 
 **Role:** Detect and name. Does NOT propose solutions. Does NOT resolve binaries — only flags them. Does NOT name success criterion (that is Solomon).
 
@@ -135,7 +135,7 @@ Round 0 — Scout pre-flight
 
 **Answers Q2 (blocker):** "What is the real cause or constraint keeping it from being solved?"
 
-**Owns:** Karpathy R2 (Simplicity First). Line Method step 3 (Theory of Constraints: find the one bottleneck).
+**Owns:** Method R2 (Simplicity First). Line Method step 3 (Theory of Constraints: find the one bottleneck).
 
 **Role:** Name **exactly one** bottleneck. Not zero. Not multiple. Apply the tier-cap check.
 
@@ -158,7 +158,7 @@ Round 0 — Scout pre-flight
 
 **Answers Q3 (smallest move):** "What is the smallest evidence-based action we can take now, and what will we learn from it?" Also closes Q1 by naming the verifiable success criterion.
 
-**Owns:** Karpathy R4 (Goal-Driven Execution). Line Method steps 5 (OODA: observe-orient-decide-act), 7 (one controlling question), 8 (false binary resolution / third option), 9 (smallest testable action), 10 (one change that simplifies the rest).
+**Owns:** Method R4 (Goal-Driven Execution). Line Method steps 5 (OODA: observe-orient-decide-act), 7 (one controlling question), 8 (false binary resolution / third option), 9 (smallest testable action), 10 (one change that simplifies the rest).
 
 **Role:** Read Observer + Constraint-Finder output. Resolve any false binary Observer flagged (step 8). Decide. Synthesize the verdict block. If Observer and Constraint-Finder produced incompatible diagnoses, name the disagreement explicitly — no synthetic consensus.
 
@@ -190,11 +190,11 @@ Disagreement: <one line — what Observer said vs what Constraint-Finder said, n
 
 ---
 
-## Deliberate mode (`--deliberate`, 3 rounds, House-model differential)
+## Deliberate mode (`--deliberate`, 3 rounds, differential model)
 
 Default Trio = 1 forward pass (Observer → Constraint-Finder → Solomon). Good for daily prompts and small decisions. Single pass means lenses do not test each other's claims — only Solomon arbitrates.
 
-`--deliberate` unlocks 3 rounds of cross-examination before Solomon judges. Modeled on Dr. House's differential diagnosis and Marketing Council's pitcher/skeptic loop: hypotheses get killed by tests, not by negotiation.
+`--deliberate` unlocks 3 rounds of cross-examination before Solomon judges. Modeled on differential diagnosis (hypotheses tested against each other until one survives) and pitcher/skeptic adversarial loops: hypotheses get killed by tests, not by negotiation.
 
 **Round 1 — Hypotheses (same as default 1-pass).**
 - Observer emits Q1 block.
@@ -224,7 +224,7 @@ Default Trio = 1 forward pass (Observer → Constraint-Finder → Solomon). Good
 - Stakeholder needs to see the work, not just the verdict.
 
 **When NOT to use `--deliberate`:**
-- Daily prompts, quick sanity checks, single-fact questions. Default 1-pass suffices. `--deliberate` on a trivial prompt is itself a Karpathy R2 violation.
+- Daily prompts, quick sanity checks, single-fact questions. Default 1-pass suffices. `--deliberate` on a trivial prompt is itself a Method R2 violation.
 
 ---
 
@@ -298,14 +298,14 @@ In both modes: do not offer next steps beyond Solomon's Smallest Testable Action
 - Scout proposes a solution or names a constraint → it stops being Scout.
 - Scout's Door classification missing or vague ("depends") → AC12 fails; force one of `one-way | two-way | mixed`.
 - Scout question answered with silence or skipped → AC11 fails; write `none known`.
-- Scout expanded to 5+ questions or 8 thinker-personas → bloat, Karpathy R2 violation.
+- Scout expanded to 5+ questions or 8 thinker-personas → bloat, Method R2 violation.
 
 ---
 
 ## ADR (one-line each)
 
-- **Decision:** Single file. Pre-flight Scout (Round 0) with 4 anchor-breaking questions runs before 3 sequential non-overlapping lenses keyed to 3 Core Questions. Manual `/trio` trigger. Variable depth via `--deliberate` flag (default Scout + 1-pass; optional Scout + 3-round House-model differential). Solomon synthesizes.
-- **Drivers:** Karpathy 4 rules; Line Method 10 steps; 3 Core Questions spine (real problem / real blocker / smallest smart move); Dr. House differential diagnosis pattern (hypotheses killed by tests, not negotiated); Kahneman outside view + Bezos reversibility + Klein premortem (pre-anchor discipline via Scout); user "simple/elegant" directive; meta-discipline (skill obeys what it enforces).
+- **Decision:** Single file. Pre-flight Scout (Round 0) with 4 anchor-breaking questions runs before 3 sequential non-overlapping lenses keyed to 3 Core Questions. Manual `/trio` trigger. Variable depth via `--deliberate` flag (default Scout + 1-pass; optional Scout + 3-round differential model). Solomon synthesizes.
+- **Drivers:** the 4 LLM coding Methods; Line Method 10 steps; 3 Core Questions spine (real problem / real blocker / smallest smart move); differential diagnosis pattern (hypotheses killed by tests, not negotiated); outside-view + reversibility + premortem pre-anchor discipline (via Scout); user "simple/elegant" directive; meta-discipline (skill obeys what it enforces).
 - **Alternatives killed:** multi-file orchestrator (R2 violation); always-on adversarial pushback round (consensus theater on trivial prompts); auto-hook trigger modes (idempotency + R2); `context.json` persistence (overbuilt for one flag); fixed-depth 3 rounds for every invocation (R2 violation when 1 pass suffices); 10-question Scout with 8 named-thinker personas (theater + 6 functions overlapping existing lenses); user-proposed Scout Q4 "smallest reversible test" (encroaches on Solomon's verdict).
 - **Why chosen:** smallest viable shape delivering Scout pre-flight + Solomon synthesis under 1,000 words for daily use, with `--deliberate` opt-in for high-stakes decisions where Observer ↔ Constraint-Finder must cross-examine. Scout's 4 questions cover the genuinely-new failure modes (outside view, reversibility, hidden cost, premortem) without duplicating Observer / CF / Solomon roles.
 - **Consequences:** manual only; tier-cap keyword-based (false negatives possible — Observer catches semantically and surfaces via `Disagreement:`); `--deliberate` ~1.6× tokens and ~3× latency vs 1-pass, user must judge when stakes justify; Scout adds ~80 tokens / call in 1-pass mode (negligible, always-on); Scout findings are inputs not orders — Observer and CF may disagree with Scout in their own outputs.

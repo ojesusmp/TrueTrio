@@ -17,7 +17,7 @@ If you discover a security issue in `TrueTrio`, please report it privately.
 
 1. Do **not** open a public GitHub issue for security reports.
 2. Use GitHub's private vulnerability reporting feature on this repository: open the "Security" tab and follow the prompts under "Report a vulnerability." That submission is visible only to maintainers.
-3. Alternative: email ojesusmp@gmail.com.
+3. Alternative: open a private security advisory at https://github.com/ojesusmp/TrueTrio/security/advisories/new.
 
 ### What to include
 

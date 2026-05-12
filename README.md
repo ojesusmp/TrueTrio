@@ -75,6 +75,8 @@ Requires Node.js 18+.
 
 **Update later:** re-run the same command. It fetches the latest `main`, re-runs postinstall, and overwrites the deployed `SKILL.md`.
 
+> **Windows note:** on Windows with Node.js 24 and npm 11, `npm install -g github:...` may print a `MODULE_NOT_FOUND` error and exit with code 1 even when the postinstall script ran successfully and `SKILL.md` was deployed to the correct location. This is a known cosmetic issue in npm's GitHub-install pipeline on that combination, not a real failure. Verify by checking the hash of `~/.claude/skills/trio/SKILL.md` against the repo's `SKILL.md` — if they match, the install worked. If you prefer a clean exit code on Windows, use the git clone path above, or download the tarball and install it directly: `npm pack github:ojesusmp/TrueTrio` then `npm install -g .\truetrio-<version>.tgz`.
+
 **Verify:** the install command prints `[trio install] SHA256: <hash>`. The deployed file should hash to the same value:
 
 ```bash

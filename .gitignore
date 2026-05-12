@@ -26,3 +26,7 @@ npm-debug.log*
 
 # Logs
 *.log
+
+# Local release-prep temp files
+.commit-msg-*.tmp
+.release-notes-*.tmp.md

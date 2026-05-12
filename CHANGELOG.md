@@ -4,6 +4,23 @@ All notable changes to `TrueTrio` are documented in this file.
 
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.3.2] - 2026-05-12
+
+### Documentation
+
+- Added a Windows note to the README install section documenting that `npm install -g github:...` may surface a phantom `MODULE_NOT_FOUND` exit-1 on Windows + Node 24 + npm 11 despite the postinstall script running successfully and deploying `SKILL.md`. The note explains how to verify the install via hash comparison and offers the local-tarball install path (`npm pack` + `npm install -g <tgz>`) as a clean-exit alternative.
+
+### Chore
+
+- Added `.commit-msg-*.tmp` and `.release-notes-*.tmp.md` to `.gitignore` to prevent local release-prep scratch files from being committed.
+- Removed a stray `.commit-msg-v1.3.1.tmp` that was accidentally committed in the v1.3.1 release.
+
+### Notes
+
+- No skill behavior change. `SKILL.md` content is byte-identical to v1.3.0 and v1.3.1.
+
+[1.3.2]: https://github.com/ojesusmp/TrueTrio/releases/tag/v1.3.2
+
 ## [1.3.1] - 2026-05-12
 
 ### Fixed

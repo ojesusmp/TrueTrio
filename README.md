@@ -19,41 +19,41 @@ Default `/trio <thing>` runs Scout + 1-pass (under 1,000 words output). The `--d
 
 ## Install
 
-Pick one. The skill is a single `SKILL.md` file; install means placing it where Claude Code's loader scans (`~/.claude/skills/trio/SKILL.md` on Linux/macOS, `C:\Users\<you>\.claude\skills\trio\SKILL.md` on Windows).
-
-### 1. Claude Code plugin marketplace (when public)
-
-```
-/plugin marketplace add ojesusmp/TrueTrio
-/plugin install trio@truetrio
-```
-
-> While this repo stays private, marketplace install will not resolve. Use the git-clone path below until the repo is made public.
-
-### 2. Git clone (private-repo or latest unreleased)
+One command. Works on Linux, macOS, and Windows. No manual file copying.
 
 ```bash
-gh repo clone ojesusmp/TrueTrio
-cd TrueTrio
+npm install -g github:ojesusmp/TrueTrio
 ```
 
-Then copy the skill into your local skills directory:
+The package's postinstall step copies `SKILL.md` into your Claude Code skills directory automatically (`~/.claude/skills/trio/SKILL.md` on every platform — Node's `os.homedir()` resolves to the correct path).
+
+Requires Node.js 18+.
+
+### Update
+
+Re-run the same command. It pulls the latest `main`, re-runs postinstall, and overwrites the deployed `SKILL.md`.
 
 ```bash
-# Linux / macOS
-mkdir -p ~/.claude/skills/trio
-cp SKILL.md ~/.claude/skills/trio/SKILL.md
+npm install -g github:ojesusmp/TrueTrio
 ```
 
-```powershell
-# Windows PowerShell
-New-Item -ItemType Directory -Force -Path "$env:USERPROFILE\.claude\skills\trio" | Out-Null
-Copy-Item .\SKILL.md "$env:USERPROFILE\.claude\skills\trio\SKILL.md"
+### Manual re-install / repair
+
+After installation, the package exposes a `truetrio` command. Run it any time to re-copy `SKILL.md` from the installed package back into your skills directory (useful if the skills file was deleted, edited, or corrupted):
+
+```bash
+truetrio
 ```
 
 ### Verify
 
-Open a fresh Claude Code conversation. Type `/trio "make my app better"`. The output should begin with `Round 0 — Scout pre-flight` and end with a Solomon verdict of `STOP-AND-RECLARIFY` (because the prompt itself is Cynefin-confused — that is the skill's first acceptance test).
+Open a fresh Claude Code conversation. Type:
+
+```
+/trio "make my app better"
+```
+
+The output should begin with `Round 0 — Scout pre-flight` and end with a Solomon verdict of `STOP-AND-RECLARIFY` (because the prompt itself is Cynefin-confused — that is the skill's first acceptance test).
 
 ---
 

@@ -1,0 +1,57 @@
+{
+  "name": "truetrio",
+  "version": "1.1.0",
+  "description": "Trio — three-lens simplicity check with pre-flight Scout for Claude Code. Observer / Constraint-Finder / Solomon plus a 4-question Scout (hidden cost, outside view, reversibility, premortem). Single-file SKILL.md installed to ~/.claude/skills/trio/.",
+  "type": "module",
+  "main": "bin/install.mjs",
+  "bin": {
+    "truetrio": "bin/install.mjs"
+  },
+  "files": [
+    "SKILL.md",
+    "bin/",
+    "README.md",
+    "LICENSE",
+    "CHANGELOG.md",
+    "EXAMPLES.md"
+  ],
+  "scripts": {
+    "postinstall": "node bin/install.mjs",
+    "test": "node bin/install.mjs --dry-run"
+  },
+  "homepage": "https://github.com/ojesusmp/TrueTrio#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ojesusmp/TrueTrio.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ojesusmp/TrueTrio/issues"
+  },
+  "license": "MIT",
+  "author": {
+    "name": "Orlando Molina",
+    "url": "https://github.com/ojesusmp"
+  },
+  "contributors": [
+    {
+      "name": "TruePointAgents",
+      "url": "https://github.com/ojesusmp"
+    }
+  ],
+  "keywords": [
+    "claude-code",
+    "claude-skill",
+    "decision-making",
+    "simplicity",
+    "trio",
+    "karpathy",
+    "line-method",
+    "cynefin",
+    "ooda",
+    "premortem",
+    "outside-view"
+  ],
+  "engines": {
+    "node": ">=18"
+  }
+}

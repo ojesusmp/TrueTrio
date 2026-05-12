@@ -1,0 +1,28 @@
+# Claude Code harness state (not part of the skill)
+.omc/
+.journal/
+_guardar/
+
+# Operator-maintained usage feedback file (not part of the skill)
+.usage.log
+
+# Editor / OS
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+.vscode/
+.idea/
+
+# Secrets — defense-in-depth
+.env
+.env.*
+*credentials*
+*secret*
+
+# Node (in case of future packaging)
+node_modules/
+npm-debug.log*
+
+# Logs
+*.log

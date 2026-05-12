@@ -1,0 +1,24 @@
+fix: v1.3.1 - convert installer to CommonJS for npm postinstall reliability
+
+The v1.3.0 installer used ESM (install.mjs). On Windows with Node 24 and
+npm 11, the global install pipeline misreports the postinstall script
+path for .mjs files, surfacing a phantom MODULE_NOT_FOUND exit-1 even
+when the script ran successfully and SKILL.md was copied into place.
+
+CommonJS (install.cjs) is the lifecycle convention used by mature
+packages such as the official Claude Code package (which uses
+install.cjs and exits cleanly). Switching to CJS avoids the issue.
+
+Files changed:
+- install.cjs: new CommonJS installer (functional equivalent of the
+  former install.mjs).
+- install.mjs: removed.
+- package.json: removed "type": "module"; main, postinstall, test, and
+  files array now reference install.cjs.
+- CHANGELOG.md: v1.3.1 entry covers the fix.
+
+No skill behavior change. SKILL.md content is byte-identical to v1.3.0.
+
+Author: Orlando Molina - TruePointAgents
+
+Co-Authored-By: Claude Opus 4.7 (1M context) <noreply@anthropic.com>

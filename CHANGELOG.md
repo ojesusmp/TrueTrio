@@ -35,7 +35,7 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 - **Undefined behavior:** conflicting `--pass=prompt --pass=solution` flags had no precedence rule. `--pass=solution` now wins (AC18).
 - **Trigger-health drift:** the published frontmatter `description` had diverged from (and was looser than) the version already running locally in production — the published copy lacked the "do not auto-fire" guard entirely. Adopted the tighter, already-proven description.
 
-- **Leftover fictional-name reference**: the Round 2 heading still read "(House differential)" — missed by the v1.2.0 scrub and exactly what the (previously missing) `.namecheck.txt` audit would have caught. Now "(differential)".
+- **Leftover fictional-name reference**: the Round 2 parenthetical still carried the fictional-doctor reference missed by the v1.2.0 scrub — exactly what the (previously missing) `.namecheck.txt` audit exists to catch. Now reads "(differential)".
 - **3-way version mismatch** (package.json 1.3.1 / CHANGELOG 1.3.2 / marketplace.json 1.3.0) — all now agree on 1.4.0.
 - **CONTRIBUTING.md's 250-line cap** was already violated by the pre-existing 313-line `SKILL.md`; the cap now honestly reads 400 lines.
 

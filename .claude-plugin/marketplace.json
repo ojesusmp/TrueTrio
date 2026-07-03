@@ -3,7 +3,7 @@
   "name": "truetrio",
   "displayName": "Trio",
   "description": "Three-lens simplicity check with pre-flight Scout: Observer, Constraint-Finder, Solomon. Catches overengineering, missing variables, hidden costs, and false binaries before you commit.",
-  "version": "1.3.0",
+  "version": "1.4.0",
   "author": {
     "name": "Orlando Molina",
     "url": "https://github.com/ojesusmp"

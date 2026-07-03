@@ -4,7 +4,27 @@ All notable changes to `TrueTrio` are documented in this file.
 
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [1.4.0] - 2026-07-02
+
+### Added
+
+- **Model & effort adaptation section** in `SKILL.md`: Trio is explicitly
+  model-agnostic and effort-agnostic — it must behave identically on any
+  Claude tier (cheapest to flagship) at any reasoning-effort level. The
+  environment's accepted aliases are the live source of truth; models added,
+  renamed, or removed change nothing in the file. Written against bands, not
+  names, per skill-hardener defect class (e).
+- **Mechanical gate** (`test/trio-quiz.txt`, shipped in the npm package): 8
+  scenario questions piped with the live `SKILL.md` to any model
+  (`cat SKILL.md test/trio-quiz.txt | claude -p --model <alias>`); expected
+  answers documented in the README's new Verification section. The gate must
+  pass identically on at least two model tiers — the cross-tier proof that
+  Trio reads correctly on every model.
+- `.namecheck.txt` — referenced by CONTRIBUTING.md's pre-release name audit
+  since v1.2.0 but never actually committed; now exists, seeded with the
+  known scrubbed patterns.
+- CONTRIBUTING.md now requires running the gate before any PR touching
+  `SKILL.md`, and adding a quiz question for any rule change.
 
 ### Fixed (skill-hardener Phase 0/1/2 pass)
 
@@ -15,10 +35,13 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 - **Undefined behavior:** conflicting `--pass=prompt --pass=solution` flags had no precedence rule. `--pass=solution` now wins (AC18).
 - **Trigger-health drift:** the published frontmatter `description` had diverged from (and was looser than) the version already running locally in production — the published copy lacked the "do not auto-fire" guard entirely. Adopted the tighter, already-proven description.
 
+- **Leftover fictional-name reference**: the Round 2 heading still read "(House differential)" — missed by the v1.2.0 scrub and exactly what the (previously missing) `.namecheck.txt` audit would have caught. Now "(differential)".
+- **3-way version mismatch** (package.json 1.3.1 / CHANGELOG 1.3.2 / marketplace.json 1.3.0) — all now agree on 1.4.0.
+- **CONTRIBUTING.md's 250-line cap** was already violated by the pre-existing 313-line `SKILL.md`; the cap now honestly reads 400 lines.
+
 ### Notes
 
-- Found via an independent skill-hardener Phase 0 recon + Phase 1 gap analysis run against this skill (2026-07-02): also surfaced a 3-way version mismatch (package.json 1.3.1 / CHANGELOG 1.3.2 / marketplace.json 1.3.0), a `.namecheck.txt` referenced by CONTRIBUTING.md but absent from the repo, and CONTRIBUTING.md's stated 250-line cap already being violated by the pre-existing 313-line file. None of those are fixed in this entry — they're Phase 6 (repo sweep) scope, tracked separately.
-- No mechanical gate exists yet for this skill (no `test/` quiz file, only prose ACs) — Phase 3 (build the gate) is the natural next step so these fixes (and all existing rules) get a regression check.
+- All findings come from an independent skill-hardener run against this skill (2026-07-02): Phase 0 staleness recon, Phase 1 five-class gap analysis, Phase 2 rewrites, Phase 3 gate build, Phase 6 repo sweep. Gate results per model tier are recorded in the release PR.
 
 ## [1.3.2] - 2026-05-12
 
@@ -35,6 +58,7 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 
 - No skill behavior change. `SKILL.md` content is byte-identical to v1.3.0 and v1.3.1.
 
+[1.4.0]: https://github.com/ojesusmp/TrueTrio/releases/tag/v1.4.0
 [1.3.2]: https://github.com/ojesusmp/TrueTrio/releases/tag/v1.3.2
 
 ## [1.3.1] - 2026-05-12

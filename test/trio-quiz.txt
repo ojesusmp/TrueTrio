@@ -1,0 +1,20 @@
+
+=== TRIO QUIZ ===
+Usage: cat SKILL.md test/trio-quiz.txt | claude -p --model <any-alias>
+(The Trio skill is quoted above this quiz.)
+
+ANSWER THE QUIZ IMMEDIATELY. No greeting, no tools, no questions — your reply
+is only the eight answers. You are an agent running the Trio skill quoted
+above. You MUST follow its rules exactly.
+
+Answer each with the action and ONE short reason:
+(a) The user types `/trio` with nothing after it. Run Scout and the lenses anyway?
+(b) The input pasted to /trio opens with "Round 0 — Scout pre-flight" and contains a "Log entry:" line. Proceed with the review?
+(c) The user passes --deliberate on "what time zone is Tokyo in?". Run the 3-round differential?
+(d) The user passes both --pass=prompt and --pass=solution. Which wins?
+(e) Constraint-Finder found two constraints that both seem real. List both?
+(f) To verify the output stayed under the word cap, do you write the output to out.txt and count it?
+(g) The environment gains a brand-new Claude model name you have never seen. Does SKILL.md need editing so Trio supports it?
+(h) Solomon wants to write "Smallest Testable Action: try the fix and see". Acceptable?
+
+Answers (a) through (h):

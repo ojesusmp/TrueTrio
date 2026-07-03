@@ -135,6 +135,27 @@ The full spec, persona prompts, acceptance criteria, and ADR live in `SKILL.md`.
 
 ---
 
+## Verification
+
+Trio ships with a mechanical gate: a quiz whose questions are piped to a model together with the **live** `SKILL.md` (never a pasted copy, so the test can never drift from the rules it tests). Any cheap model works — and the gate must pass identically on at least two tiers, which is what proves Trio reads correctly on every Claude model from the cheapest to the flagship, at any effort level:
+
+```bash
+cat SKILL.md test/trio-quiz.txt | claude -p --model haiku
+```
+
+Expected answers:
+
+- **(a)** No — empty input short-circuits: emit only `STOP-AND-RECLARIFY — no input to review`; no Scout, no lenses (AC15).
+- **(b)** No — that is Trio's own output; emit only the self-invocation refusal: Trio reviews input, not itself (AC16).
+- **(c)** No — trivial single-fact input downgrades to 1-pass, first line states the downgrade (AC17).
+- **(d)** `--pass=solution` — it carries strictly more context (AC18).
+- **(e)** No — exactly ONE constraint from the enum, never two (AC6).
+- **(f)** No — Trio is emit-only and writes no file (AC5); self-count per section while composing.
+- **(g)** No — Trio is model-agnostic; the environment's accepted aliases are the live source of truth and new/renamed/removed models change nothing in SKILL.md.
+- **(h)** No — the Smallest Testable Action must contain a threshold or comparison matching the AC4 regex; "try it and see" fails it.
+
+Any drift from those answers means an edit broke a rule. Re-run on two model tiers after any `SKILL.md` change.
+
 ## Contributing
 
 See [CONTRIBUTING.md](./CONTRIBUTING.md).

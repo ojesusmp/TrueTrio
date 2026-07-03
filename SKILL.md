@@ -202,7 +202,7 @@ Default Trio = 1 forward pass (Observer → Constraint-Finder → Solomon). Good
 - Constraint-Finder emits Q2 block.
 - Solomon stays silent in R1.
 
-**Round 2 — Cross-attack (House differential).**
+**Round 2 — Cross-attack (differential).**
 - Observer picks the single weakest claim in Constraint-Finder's R1 output. Names it. Proposes the cheapest test that would kill it (binary or numeric, <72h, <$50).
 - Constraint-Finder picks the single weakest claim in Observer's R1 output. Names it. Proposes the cheapest test that would kill it.
 - Each lens emits exactly 1 attack + 1 killing test. ≤80 words per lens.
@@ -226,6 +226,17 @@ Default Trio = 1 forward pass (Observer → Constraint-Finder → Solomon). Good
 
 **When NOT to use `--deliberate`:**
 - Daily prompts, quick sanity checks, single-fact questions. Default 1-pass suffices. `--deliberate` on a trivial prompt is itself a Method R2 violation.
+
+---
+
+## Model & effort adaptation
+
+Trio is model-agnostic and effort-agnostic by design. It names no models, and must behave identically on any Claude tier — from the fastest/cheapest the environment offers to the top flagship — and at any reasoning-effort setting from lowest to highest.
+
+- **Live source of truth** = the model aliases and effort levels the current environment actually accepts, never a memorized list. Models added, renamed, or removed change nothing in this file.
+- **Cheap model or low effort:** the word caps and truncation order (Token / word cap below) already govern shrinking; never drop Scout's 4 questions or Solomon's verdict block.
+- **Big model or max effort:** the caps still bind — extra capability buys sharper answers, never longer output or extra lenses.
+- **Cross-tier proof:** the gate (`test/trio-quiz.txt`) must produce the README's expected answers on at least two different model tiers. A rule only one tier reads correctly is a wording bug in this file — fix the text, not the model.
 
 ---
 

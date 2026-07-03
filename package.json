@@ -1,6 +1,6 @@
 {
   "name": "truetrio",
-  "version": "1.3.1",
+  "version": "1.4.0",
   "description": "Trio — three-lens simplicity check with pre-flight Scout for Claude Code. Observer / Constraint-Finder / Solomon plus a 4-question Scout (hidden cost, outside view, reversibility, premortem). Single-file SKILL.md installed to ~/.claude/skills/trio/.",
   "main": "install.cjs",
   "files": [
@@ -9,7 +9,8 @@
     "README.md",
     "LICENSE",
     "CHANGELOG.md",
-    "EXAMPLES.md"
+    "EXAMPLES.md",
+    "test/"
   ],
   "scripts": {
     "postinstall": "node install.cjs",

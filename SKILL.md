@@ -1,6 +1,6 @@
 ---
 name: trio
-description: "Three-lens simplicity check with pre-flight Scout for any prompt or proposed solution. Scout opens with 4 anchor-breaking questions (hidden cost, outside view, reversibility, premortem). Then each lens answers one of the 3 Core Questions — Observer: 'what are we changing?' (Q1) — Constraint-Finder: 'what is really blocking it?' (Q2) — Solomon: 'what is the smallest smart move now, and how will we know it worked?' (Q3). Backed by the 4 LLM coding Methods + Line Method 10 steps + outside-view / reversibility / premortem pre-flight discipline. Default = Scout + 1-pass forward sweep. `--deliberate` flag runs Scout + 3-round differential model: lenses cross-attack weakest claims and propose killing tests before Solomon judges. Constraint-Finder flags tier-cap violations for paid-context users. Solomon emits PROCEED / SIMPLIFY / STOP-AND-RECLARIFY verdict. Output capped at 1,000 words (1-pass) or 1,700 words (--deliberate). Use when a request looks vague, when a Claude-proposed solution offers many options, when you suspect overengineering, or when paid-tier business context must reject free-tier capped tools."
+description: "Three-lens simplicity check (Observer / Constraint-Finder / Solomon) with pre-flight Scout. Invoke only when the user types 'trio' or '/trio' (optional --deliberate flag), or explicitly asks for a simplicity/overengineering check; do not auto-fire on ordinary requests that merely look vague or multi-option."
 aliases: [trio, simplicity-trio, line-method, method-check]
 argument-hint: "<prompt or proposed solution to review> [--pass=prompt|solution] [--paid] [--deliberate]"
 level: 2
@@ -14,7 +14,7 @@ LLMs silently pick interpretations, overengineer, and offer 15 options when 1 wi
 
 ## Prime Directive
 
-**Trio succeeds when the operator reads the verdict and knows the simplest true next step — in under 900 words (1-pass) or 1,500 words (--deliberate).** Fails when output exceeds the cap, when lenses repeat each other's work, when Solomon ratifies the input without applying step 8 (false-binary resolution), or when Constraint-Finder names zero or more than one constraint.
+**Trio succeeds when the operator reads the verdict and knows the simplest true next step — in under 1,000 words (1-pass) or 1,700 words (--deliberate).** Fails when output exceeds the cap, when lenses repeat each other's work, when Solomon ratifies the input without applying step 8 (false-binary resolution), or when Constraint-Finder names zero or more than one constraint.
 
 ---
 
@@ -61,6 +61,7 @@ Failure modes the 3 questions prevent:
 - `--pass=prompt` review the user's typed request before Claude answers
 - `--pass=solution` review a proposed solution (code, plan, multi-option answer)
 - **Default auto-detect:** input `<200 chars → prompt-pass`, `≥200 chars → solution-pass`
+- **Both flags given:** `--pass=solution` wins — a solution carries strictly more context than a bare prompt.
 
 ## Paid-tier signal
 
@@ -179,9 +180,10 @@ Disagreement: <one line — what Observer said vs what Constraint-Finder said, n
 ```
 
 **Verdict rules:**
-- `PROCEED` — Cynefin tag is `clear` or `complicated`, no tier-cap violation, no false binary, controlling question has a known answer path.
+- `PROCEED` — Cynefin tag is `clear`, `complicated`, or `complex`; no tier-cap violation; no false binary; and the controlling question has a known answer path — for `complex` the probe itself IS that path (probe-sense-respond), so a well-formed Smallest Testable Action satisfies this clause.
 - `SIMPLIFY` — bloat detected, OR false binary resolved into third option, OR proposed solution offers >2 paths when one suffices.
 - `STOP-AND-RECLARIFY` — Cynefin `confused` or `chaotic`, OR Observer cannot name the real problem, OR `tier-cap` violation blocks the solution.
+- **Precedence when more than one rule qualifies:** STOP-AND-RECLARIFY > SIMPLIFY > PROCEED. (A complex-but-bloated solution is SIMPLIFY, not PROCEED.)
 
 **Hard rules:**
 - Smallest Testable Action MUST contain a comparison or threshold (regex: `(pass|fail|>=|<=|=|<|>)\s*[\d\w]`).
@@ -201,7 +203,7 @@ Default Trio = 1 forward pass (Observer → Constraint-Finder → Solomon). Good
 - Constraint-Finder emits Q2 block.
 - Solomon stays silent in R1.
 
-**Round 2 — Cross-attack (House differential).**
+**Round 2 — Cross-attack (differential).**
 - Observer picks the single weakest claim in Constraint-Finder's R1 output. Names it. Proposes the cheapest test that would kill it (binary or numeric, <72h, <$50).
 - Constraint-Finder picks the single weakest claim in Observer's R1 output. Names it. Proposes the cheapest test that would kill it.
 - Each lens emits exactly 1 attack + 1 killing test. ≤80 words per lens.
@@ -216,7 +218,7 @@ Default Trio = 1 forward pass (Observer → Constraint-Finder → Solomon). Good
 **When R2 attack lands and lens holds in R3:** Solomon must adjudicate which side held up; the `Disagreement:` line names the unresolved split.
 **When R2 attacks miss (Observer attacks Constraint-Finder's tier-cap with no counter-evidence, etc.):** the original claim stands, R2 attack is discarded silently.
 
-**Deliberate mode output cap:** 1,500 words (vs 900 for 1-pass). If output approaches cap, truncate R2 attacks before truncating Solomon's verdict.
+**Deliberate mode output cap:** 1,700 words (vs 1,000 for 1-pass). If output approaches cap, truncate R2 attacks before truncating Solomon's verdict.
 
 **When to use `--deliberate`:**
 - High-stakes decision (firing someone, big purchase, legal letter, architecture pick, surgical decision).
@@ -228,11 +230,22 @@ Default Trio = 1 forward pass (Observer → Constraint-Finder → Solomon). Good
 
 ---
 
+## Model & effort adaptation
+
+Trio is model-agnostic and effort-agnostic by design. It names no models, and must behave identically on any Claude tier — from the fastest/cheapest the environment offers to the top flagship — and at any reasoning-effort setting from lowest to highest.
+
+- **Live source of truth** = the model aliases and effort levels the current environment actually accepts, never a memorized list. Models added, renamed, or removed change nothing in this file.
+- **Cheap model or low effort:** the word caps and truncation order (Token / word cap below) already govern shrinking; never drop Scout's 4 questions or Solomon's verdict block.
+- **Big model or max effort:** the caps still bind — extra capability buys sharper answers, never longer output or extra lenses.
+- **Cross-tier proof:** the gate (`test/trio-quiz.txt`) must produce the README's expected answers on as many distinct model tiers as the environment offers, minimum two — or on the single available model when the lineup has collapsed to one (re-run the second tier when one exists again). A rule only one tier reads correctly is a wording bug in this file — fix the text, not the model.
+
+---
+
 ## Token / word cap
 
 - Default 1-pass: total Trio output ≤ 1,000 words (Scout Round 0 ≤ 80 + 3 lenses + Solomon block).
 - `--deliberate`: ≤ 1,700 words (Scout Round 0 ≤ 200 + R1 + R2 + R3 + Solomon block).
-- Verify with `(Get-Content out.txt | Measure-Object -Word).Words`.
+- Self-count the running total per section (Scout, each lens, Solomon) while composing — this is an emit-only skill (AC5); never write output to a file to check it.
 - If approaching cap, truncate lowest-value content (R2 attacks first in --deliberate; lowest-value bullet otherwise). Never truncate Scout's 4 questions or Solomon's verdict.
 
 ---
@@ -246,21 +259,27 @@ Default Trio = 1 forward pass (Observer → Constraint-Finder → Solomon). Good
 - **AC5** skill writes no file outside its own `SKILL.md`. All Trio output is emit-only; the operator may copy the `Log entry:` line into a `.usage.log` file manually.
 - **AC6** Constraint-Finder names exactly ONE constraint from the enum.
 - **AC7** when Observer ↔ Constraint-Finder conflict, Solomon output contains substring `Disagreement:`.
-- **AC8** `--deliberate` run emits 3 distinct round headers (`Round 1`, `Round 2`, `Round 3`) and Solomon's `Why:` cites at least one R2 or R3 turn.
+- **AC8** a `--deliberate` run that reached the lenses — not short-circuited by AC15/AC16 and not downgraded by AC17 — emits 3 distinct round headers (`Round 1`, `Round 2`, `Round 3`) and Solomon's `Why:` cites at least one R2 or R3 turn.
 - **AC9** in `--deliberate`, each R2 attack contains its own killing test matching the AC4 regex.
 - **AC10** every Trio run (1-pass and `--deliberate`) emits header `Round 0 — Scout pre-flight` BEFORE any lens output.
 - **AC11** Scout output contains exactly 4 numbered answers — one each for `Not counting`, `Outside view`, `Door`, `Premortem`. Missing answer must be written as `none known` (not omitted).
 - **AC12** Scout's `Door:` line contains exactly one of `one-way | two-way | mixed`.
 - **AC13** Scout proposes no solution, names no constraint, renders no verdict (boundary-respect check).
 - **AC14** Solomon's block contains exactly one `Log entry:` line matching format `<YYYY-MM-DD> | <1-pass|deliberate> | <PROCEED|SIMPLIFY|STOP-AND-RECLARIFY> | followed=?` — operator copies this manually to `.usage.log` if maintaining a feedback file. Trio itself writes no file.
+- **AC15** input empty or under 10 characters with no attached solution → only `STOP-AND-RECLARIFY — no input to review` is emitted; no Scout, no lenses.
+- **AC16** input matching Trio's own output shape → only `STOP: input is Trio's own prior output; Trio reviews input, not itself.` is emitted; no Scout, no lenses.
+- **AC17** `--deliberate` on a single-fact/trivial input with no solution or decision → downgrades to 1-pass, first line states the downgrade.
+- **AC18** both `--pass=prompt` and `--pass=solution` given → `--pass=solution` is the one honored.
 
 ---
 
 ## Operator instructions
 
-1. User invokes `/trio <thing>` (or with `--pass=`, `--paid`, `--deliberate` flags).
+1. User invokes `/trio <thing>` (or with `--pass=`, `--paid`, `--deliberate` flags). Two guards before anything else runs:
+   - **Empty input:** `<thing>` is empty or under 10 characters with no attached solution → skip Scout and all lenses, emit only `STOP-AND-RECLARIFY — no input to review`, stop.
+   - **Self-invocation:** `<thing>` matches Trio's own output shape (opens with `Round 0 — Scout pre-flight` and contains a `Log entry:` line) → skip Scout and all lenses, emit only `STOP: input is Trio's own prior output; Trio reviews input, not itself.`, stop.
 2. Auto-detect pass mode if not specified (<200 chars → prompt; ≥200 → solution).
-3. Detect `--deliberate` flag. If absent → **1-pass mode** (steps 4–6). If present → **deliberate mode** (steps 7–13).
+3. Detect `--deliberate` flag. If absent → **1-pass mode** (steps 4–7). If present, check triviality first: a single-fact lookup or one-line factual question with no proposed solution and no decision to weigh (e.g. "what time is it") downgrades to **1-pass mode**, prefixed with `--deliberate downgraded to 1-pass: trivial input, nothing to cross-examine.`. Otherwise → **deliberate mode** (steps 8–15).
 
 **1-pass mode (default):**
 
@@ -290,7 +309,7 @@ In both modes: do not offer next steps beyond Solomon's Smallest Testable Action
 - Constraint-Finder lists three constraints → it stops being Constraint-Finder.
 - Solomon synthesizes consensus when the two lenses disagreed → erases the disagreement that mattered most.
 - Smallest Testable Action reads "test it" or "try it" → no threshold, AC4 fails.
-- Output > 900 words → token-cap breach, AC3 fails.
+- Output > 1,000 words (1-pass) or > 1,700 (`--deliberate`) → token-cap breach, AC3 fails.
 - Trio invoked on its own output recursively → forbidden; Trio reviews input, not itself.
 - `--deliberate` used on trivial prompt ("what time is it") → R2 violation; lenses manufacture friction with nothing to cross-examine.
 - In `--deliberate` R2: an "attack" with no killing test → silently dropped (AC9 violation). Attack must include a runnable test.

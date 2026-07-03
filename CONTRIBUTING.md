@@ -16,8 +16,9 @@ TrueTrio is intentionally minimal. The skill consists of a single `SKILL.md` fil
 - **Method R2 — Simplicity First.** No flexibility / configurability not requested. If your change adds a flag, a mode, or an abstraction, justify it against R2 in the PR description.
 - **Method R3 — Surgical Changes.** Every changed line must trace directly to the user's request. Do not refactor adjacent prose.
 - **No overlap between actors.** Scout names *what is missing*; Observer names *what we are changing*; Constraint-Finder names *what blocks it*; Solomon names *what to do about it*. PRs that blur these boundaries will be asked to re-scope.
-- **Hard line cap.** `SKILL.md` must stay under 250 lines and the spec word count under 3,500.
+- **Hard line cap.** `SKILL.md` must stay under 400 lines. (Originally 250; the file had already outgrown that by v1.3.x, so the cap now sits where it can actually be enforced while still keeping the whole spec holdable by one reader.)
 - **Self-test before submission.** Re-run Trio on your own diff using `/trio --pass=solution` and paste the verdict block into your PR description.
+- **Gate before submission.** Run `cat SKILL.md test/trio-quiz.txt | claude -p --model haiku` and confirm all answers match the README's Verification section. If your change adds or alters a rule, add a quiz question that would catch its regression and update the expected answers.
 
 ## Pull request workflow
 

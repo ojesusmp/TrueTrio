@@ -180,9 +180,10 @@ Disagreement: <one line — what Observer said vs what Constraint-Finder said, n
 ```
 
 **Verdict rules:**
-- `PROCEED` — Cynefin tag is `clear`, `complicated`, or `complex` (for `complex`, the Smallest Testable Action IS the probe — probe-sense-respond), no tier-cap violation, no false binary, controlling question has a known answer path.
+- `PROCEED` — Cynefin tag is `clear`, `complicated`, or `complex`; no tier-cap violation; no false binary; and the controlling question has a known answer path — for `complex` the probe itself IS that path (probe-sense-respond), so a well-formed Smallest Testable Action satisfies this clause.
 - `SIMPLIFY` — bloat detected, OR false binary resolved into third option, OR proposed solution offers >2 paths when one suffices.
 - `STOP-AND-RECLARIFY` — Cynefin `confused` or `chaotic`, OR Observer cannot name the real problem, OR `tier-cap` violation blocks the solution.
+- **Precedence when more than one rule qualifies:** STOP-AND-RECLARIFY > SIMPLIFY > PROCEED. (A complex-but-bloated solution is SIMPLIFY, not PROCEED.)
 
 **Hard rules:**
 - Smallest Testable Action MUST contain a comparison or threshold (regex: `(pass|fail|>=|<=|=|<|>)\s*[\d\w]`).
@@ -258,7 +259,7 @@ Trio is model-agnostic and effort-agnostic by design. It names no models, and mu
 - **AC5** skill writes no file outside its own `SKILL.md`. All Trio output is emit-only; the operator may copy the `Log entry:` line into a `.usage.log` file manually.
 - **AC6** Constraint-Finder names exactly ONE constraint from the enum.
 - **AC7** when Observer ↔ Constraint-Finder conflict, Solomon output contains substring `Disagreement:`.
-- **AC8** a `--deliberate` run that was not downgraded by AC17 emits 3 distinct round headers (`Round 1`, `Round 2`, `Round 3`) and Solomon's `Why:` cites at least one R2 or R3 turn.
+- **AC8** a `--deliberate` run that reached the lenses — not short-circuited by AC15/AC16 and not downgraded by AC17 — emits 3 distinct round headers (`Round 1`, `Round 2`, `Round 3`) and Solomon's `Why:` cites at least one R2 or R3 turn.
 - **AC9** in `--deliberate`, each R2 attack contains its own killing test matching the AC4 regex.
 - **AC10** every Trio run (1-pass and `--deliberate`) emits header `Round 0 — Scout pre-flight` BEFORE any lens output.
 - **AC11** Scout output contains exactly 4 numbered answers — one each for `Not counting`, `Outside view`, `Door`, `Premortem`. Missing answer must be written as `none known` (not omitted).

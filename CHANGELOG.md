@@ -51,7 +51,12 @@ Round 1 (independent T3 auditor): 6 confirmed defects, all fixed —
 - **README/SKILL cap disagreement**: same root as the first defect; resolved
   by the same rewrite.
 
-Round 2 re-verified all six fixes and hunted the seams of the fixes: results
+Round 2 re-verified all six fixes (all FIXED) and found 4 seam defects, also
+fixed: the `complex`→PROCEED fix was negated by the ANDed "known answer path"
+clause (the probe is now explicitly that path); AC8's carve-out covered only
+AC17 downgrades, not AC15/AC16 short-circuits; the README kept one uncarved
+"re-run on two model tiers" absolute; and PROCEED/SIMPLIFY had no precedence
+when both qualified (now STOP > SIMPLIFY > PROCEED). Round 3 results are
 recorded in the release PR.
 
 ### Fixed (skill-hardener Phase 0/1/2 pass)

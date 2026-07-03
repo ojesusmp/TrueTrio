@@ -154,7 +154,7 @@ Expected answers:
 - **(g)** No — Trio is model-agnostic; the environment's accepted aliases are the live source of truth and new/renamed/removed models change nothing in SKILL.md.
 - **(h)** No — the Smallest Testable Action must contain a threshold or comparison matching the AC4 regex; "try it and see" fails it.
 
-Any drift from those answers means an edit broke a rule. Re-run on two model tiers after any `SKILL.md` change.
+Any drift from those answers means an edit broke a rule. Re-run after any `SKILL.md` change — on two model tiers when the environment offers them, on the single available model otherwise.
 
 ## Contributing
 

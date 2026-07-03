@@ -137,7 +137,7 @@ The full spec, persona prompts, acceptance criteria, and ADR live in `SKILL.md`.
 
 ## Verification
 
-Trio ships with a mechanical gate: a quiz whose questions are piped to a model together with the **live** `SKILL.md` (never a pasted copy, so the test can never drift from the rules it tests). Any cheap model works — and the gate must pass identically on at least two tiers, which is what proves Trio reads correctly on every Claude model from the cheapest to the flagship, at any effort level:
+Trio ships with a mechanical gate: a quiz whose questions are piped to a model together with the **live** `SKILL.md` (never a pasted copy, so the test can never drift from the rules it tests). Any cheap model works — and the gate must pass identically on at least two tiers when the environment offers two or more (on the single available model if the lineup has collapsed to one), which is what proves Trio reads correctly on every Claude model from the cheapest to the flagship, at any effort level:
 
 ```bash
 cat SKILL.md test/trio-quiz.txt | claude -p --model haiku

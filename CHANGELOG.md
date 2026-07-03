@@ -26,6 +26,34 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 - CONTRIBUTING.md now requires running the gate before any PR touching
   `SKILL.md`, and adding a quiz question for any rule change.
 
+### Hardened (adversarial audit, Phase 4)
+
+Round 1 (independent T3 auditor): 6 confirmed defects, all fixed —
+
+- **Word-cap contradiction**: Prime Directive said 900/1,500 while AC3, the
+  Token/word-cap section, and the README said 1,000/1,700, and the
+  anti-pattern line declared >900 an AC3 failure that AC3 itself permitted.
+  All five spots now agree on 1,000 (1-pass) / 1,700 (--deliberate).
+- **Unmapped `complex` Cynefin tag**: a valid enum value satisfied none of
+  the three verdict rules, leaving Solomon with a mandated verdict and no
+  rule to produce one. `complex` now maps to PROCEED, with the Smallest
+  Testable Action explicitly serving as the probe (probe-sense-respond).
+- **Wrong operator step ranges**: "1-pass (steps 4–6)" omitted Solomon's
+  verdict step, and "deliberate (steps 7–13)" claimed 1-pass's step 7 and
+  stopped before 14–15. Now 4–7 and 8–15.
+- **AC8 vs AC17 seam** (introduced by the new triviality downgrade): AC8
+  demanded round headers from every --deliberate run including downgraded
+  ones. AC8 now scopes itself to runs not downgraded by AC17.
+- **One-model-lineup seam** (introduced by the new cross-tier proof): "at
+  least two tiers" was unsatisfiable when the environment offers one model.
+  The rule now degrades to the single available model and restores the
+  two-tier requirement when a second exists.
+- **README/SKILL cap disagreement**: same root as the first defect; resolved
+  by the same rewrite.
+
+Round 2 re-verified all six fixes and hunted the seams of the fixes: results
+recorded in the release PR.
+
 ### Fixed (skill-hardener Phase 0/1/2 pass)
 
 - **Contradiction:** the Token/word cap section told operators to verify with `(Get-Content out.txt | Measure-Object -Word).Words`, implying output must be written to a file — directly contradicting AC5 ("skill writes no file outside its own `SKILL.md`... emit-only"). Replaced with a self-count instruction that requires no file.

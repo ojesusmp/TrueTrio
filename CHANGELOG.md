@@ -4,6 +4,22 @@ All notable changes to `TrueTrio` are documented in this file.
 
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Fixed (skill-hardener Phase 0/1/2 pass)
+
+- **Contradiction:** the Token/word cap section told operators to verify with `(Get-Content out.txt | Measure-Object -Word).Words`, implying output must be written to a file — directly contradicting AC5 ("skill writes no file outside its own `SKILL.md`... emit-only"). Replaced with a self-count instruction that requires no file.
+- **Environment fragility:** that same verification command was PowerShell-only with no bash/macOS equivalent, unlike every other verify step in the README. Removed along with the contradiction above (one rewrite fixed both).
+- **Contradiction / unenforced anti-pattern:** Anti-patterns forbade `--deliberate` on trivial prompts and forbade recursive self-invocation, but the Operator instructions had no rule enforcing either — an agent following the literal instructions had no way to avoid the exact failures the Anti-patterns section describes. Added an explicit triviality-downgrade rule (step 3) and a self-invocation refusal guard (step 1), plus AC15-AC18 documenting them.
+- **Undefined behavior:** empty/near-empty input (e.g. bare `/trio`) had no defined handling; the pipeline would run Scout and all three lenses against nothing. Added a short-circuit guard (step 1, AC15).
+- **Undefined behavior:** conflicting `--pass=prompt --pass=solution` flags had no precedence rule. `--pass=solution` now wins (AC18).
+- **Trigger-health drift:** the published frontmatter `description` had diverged from (and was looser than) the version already running locally in production — the published copy lacked the "do not auto-fire" guard entirely. Adopted the tighter, already-proven description.
+
+### Notes
+
+- Found via an independent skill-hardener Phase 0 recon + Phase 1 gap analysis run against this skill (2026-07-02): also surfaced a 3-way version mismatch (package.json 1.3.1 / CHANGELOG 1.3.2 / marketplace.json 1.3.0), a `.namecheck.txt` referenced by CONTRIBUTING.md but absent from the repo, and CONTRIBUTING.md's stated 250-line cap already being violated by the pre-existing 313-line file. None of those are fixed in this entry — they're Phase 6 (repo sweep) scope, tracked separately.
+- No mechanical gate exists yet for this skill (no `test/` quiz file, only prose ACs) — Phase 3 (build the gate) is the natural next step so these fixes (and all existing rules) get a regression check.
+
 ## [1.3.2] - 2026-05-12
 
 ### Documentation

@@ -1,6 +1,6 @@
 ---
 name: trio
-description: "Three-lens simplicity check with pre-flight Scout for any prompt or proposed solution. Scout opens with 4 anchor-breaking questions (hidden cost, outside view, reversibility, premortem). Then each lens answers one of the 3 Core Questions — Observer: 'what are we changing?' (Q1) — Constraint-Finder: 'what is really blocking it?' (Q2) — Solomon: 'what is the smallest smart move now, and how will we know it worked?' (Q3). Backed by the 4 LLM coding Methods + Line Method 10 steps + outside-view / reversibility / premortem pre-flight discipline. Default = Scout + 1-pass forward sweep. `--deliberate` flag runs Scout + 3-round differential model: lenses cross-attack weakest claims and propose killing tests before Solomon judges. Constraint-Finder flags tier-cap violations for paid-context users. Solomon emits PROCEED / SIMPLIFY / STOP-AND-RECLARIFY verdict. Output capped at 1,000 words (1-pass) or 1,700 words (--deliberate). Use when a request looks vague, when a Claude-proposed solution offers many options, when you suspect overengineering, or when paid-tier business context must reject free-tier capped tools."
+description: "Three-lens simplicity check (Observer / Constraint-Finder / Solomon) with pre-flight Scout. Invoke only when the user types 'trio' or '/trio' (optional --deliberate flag), or explicitly asks for a simplicity/overengineering check; do not auto-fire on ordinary requests that merely look vague or multi-option."
 aliases: [trio, simplicity-trio, line-method, method-check]
 argument-hint: "<prompt or proposed solution to review> [--pass=prompt|solution] [--paid] [--deliberate]"
 level: 2
@@ -61,6 +61,7 @@ Failure modes the 3 questions prevent:
 - `--pass=prompt` review the user's typed request before Claude answers
 - `--pass=solution` review a proposed solution (code, plan, multi-option answer)
 - **Default auto-detect:** input `<200 chars → prompt-pass`, `≥200 chars → solution-pass`
+- **Both flags given:** `--pass=solution` wins — a solution carries strictly more context than a bare prompt.
 
 ## Paid-tier signal
 
@@ -232,7 +233,7 @@ Default Trio = 1 forward pass (Observer → Constraint-Finder → Solomon). Good
 
 - Default 1-pass: total Trio output ≤ 1,000 words (Scout Round 0 ≤ 80 + 3 lenses + Solomon block).
 - `--deliberate`: ≤ 1,700 words (Scout Round 0 ≤ 200 + R1 + R2 + R3 + Solomon block).
-- Verify with `(Get-Content out.txt | Measure-Object -Word).Words`.
+- Self-count the running total per section (Scout, each lens, Solomon) while composing — this is an emit-only skill (AC5); never write output to a file to check it.
 - If approaching cap, truncate lowest-value content (R2 attacks first in --deliberate; lowest-value bullet otherwise). Never truncate Scout's 4 questions or Solomon's verdict.
 
 ---
@@ -253,14 +254,20 @@ Default Trio = 1 forward pass (Observer → Constraint-Finder → Solomon). Good
 - **AC12** Scout's `Door:` line contains exactly one of `one-way | two-way | mixed`.
 - **AC13** Scout proposes no solution, names no constraint, renders no verdict (boundary-respect check).
 - **AC14** Solomon's block contains exactly one `Log entry:` line matching format `<YYYY-MM-DD> | <1-pass|deliberate> | <PROCEED|SIMPLIFY|STOP-AND-RECLARIFY> | followed=?` — operator copies this manually to `.usage.log` if maintaining a feedback file. Trio itself writes no file.
+- **AC15** input empty or under 10 characters with no attached solution → only `STOP-AND-RECLARIFY — no input to review` is emitted; no Scout, no lenses.
+- **AC16** input matching Trio's own output shape → only `STOP: input is Trio's own prior output; Trio reviews input, not itself.` is emitted; no Scout, no lenses.
+- **AC17** `--deliberate` on a single-fact/trivial input with no solution or decision → downgrades to 1-pass, first line states the downgrade.
+- **AC18** both `--pass=prompt` and `--pass=solution` given → `--pass=solution` is the one honored.
 
 ---
 
 ## Operator instructions
 
-1. User invokes `/trio <thing>` (or with `--pass=`, `--paid`, `--deliberate` flags).
+1. User invokes `/trio <thing>` (or with `--pass=`, `--paid`, `--deliberate` flags). Two guards before anything else runs:
+   - **Empty input:** `<thing>` is empty or under 10 characters with no attached solution → skip Scout and all lenses, emit only `STOP-AND-RECLARIFY — no input to review`, stop.
+   - **Self-invocation:** `<thing>` matches Trio's own output shape (opens with `Round 0 — Scout pre-flight` and contains a `Log entry:` line) → skip Scout and all lenses, emit only `STOP: input is Trio's own prior output; Trio reviews input, not itself.`, stop.
 2. Auto-detect pass mode if not specified (<200 chars → prompt; ≥200 → solution).
-3. Detect `--deliberate` flag. If absent → **1-pass mode** (steps 4–6). If present → **deliberate mode** (steps 7–13).
+3. Detect `--deliberate` flag. If absent → **1-pass mode** (steps 4–6). If present, check triviality first: a single-fact lookup or one-line factual question with no proposed solution and no decision to weigh (e.g. "what time is it") downgrades to **1-pass mode**, prefixed with `--deliberate downgraded to 1-pass: trivial input, nothing to cross-examine.`. Otherwise → **deliberate mode** (steps 7–13).
 
 **1-pass mode (default):**
 
